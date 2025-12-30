@@ -4,7 +4,7 @@ import { MessageFeed } from './MessageFeed.jsx';
 import { MessageComposer } from './MessageComposer.jsx';
 import { useAuth } from '../state/AuthContext.jsx';
 
-export const ChatShell = ({ user, rooms, activeRoom, messages, onSelectRoom, onSend, onCreateRoom, onDirectRoom, loadingRooms, onLogout }) => {
+export const ChatShell = ({ user, rooms, activeRoom, messages, onSelectRoom, onSend, onCreateRoom, onDirectRoom, loadingRooms, onLogout, error, onErrorClose, sidebarOpen, onToggleSidebar, onClearChat, onDeleteRoom }) => {
   const sortedRooms = useMemo(
     () => [...rooms].sort((a, b) => new Date(b.lastMessageAt || 0) - new Date(a.lastMessageAt || 0)),
     [rooms]
@@ -12,6 +12,13 @@ export const ChatShell = ({ user, rooms, activeRoom, messages, onSelectRoom, onS
 
   return (
     <div className="chat-shell">
+      {error && (
+        <div className="error-banner">
+          <span>{error}</span>
+          <button onClick={onErrorClose}>✕</button>
+        </div>
+      )}
+      <button className="sidebar-toggle" onClick={onToggleSidebar}>☰</button>
       <RoomList
         user={user}
         rooms={sortedRooms}
@@ -21,6 +28,9 @@ export const ChatShell = ({ user, rooms, activeRoom, messages, onSelectRoom, onS
         onDirectRoom={onDirectRoom}
         loading={loadingRooms}
         onLogout={onLogout}
+        sidebarOpen={sidebarOpen}
+        onToggleSidebar={onToggleSidebar}
+        onDeleteRoom={onDeleteRoom}
       />
       <div className="chat-panel">
         {activeRoom ? (
@@ -30,7 +40,12 @@ export const ChatShell = ({ user, rooms, activeRoom, messages, onSelectRoom, onS
                 <p className="eyebrow">{activeRoom.isDirect ? 'Direct' : 'Room'}</p>
                 <h3>{activeRoom.name}</h3>
               </div>
-              <div className="badge">{activeRoom.isDirect ? 'Private' : 'Shared'}</div>
+              <div className="header-actions">
+                <button className="icon-btn-group" onClick={onClearChat} title="Clear chat">
+                  <span className="icon">🗑</span>
+                  <span className="label">Clear chat</span>
+                </button>
+              </div>
             </header>
             <MessageFeed messages={messages} currentUserId={user.id} />
             <MessageComposer roomId={activeRoom._id} onSend={onSend} />

@@ -51,4 +51,17 @@ router.post('/:roomId/messages', authRequired, async (req, res) => {
   res.status(201).json({ message: populated });
 });
 
+router.post('/:roomId/clear', authRequired, async (req, res) => {
+  const { roomId } = req.params;
+  await Message.deleteMany({ room: roomId });
+  res.json({ message: 'Chat cleared' });
+});
+
+router.post('/:roomId/delete', authRequired, async (req, res) => {
+  const { roomId } = req.params;
+  await Message.deleteMany({ room: roomId });
+  await Room.findByIdAndDelete(roomId);
+  res.json({ message: 'Room deleted' });
+});
+
 export default router;

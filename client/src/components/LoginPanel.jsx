@@ -25,10 +25,10 @@ export const LoginPanel = ({ onAuth }) => {
         <h1>PulseChat</h1>
         <p className="muted">Stay in sync with real-time rooms and DMs.</p>
         <div className="mode-toggle">
-          <button className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')}>
+          <button className={mode === 'login' ? 'active' : ''} onClick={() => {setMode('login'); setError('');}}>
             Sign In
           </button>
-          <button className={mode === 'register' ? 'active' : ''} onClick={() => setMode('register')}>
+          <button className={mode === 'register' ? 'active' : ''} onClick={() => {setMode('register'); setError('');}}>
             Create Account
           </button>
         </div>
@@ -38,7 +38,7 @@ export const LoginPanel = ({ onAuth }) => {
               type="text"
               placeholder="Full name"
               value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              onChange={(e) => {setForm({ ...form, name: e.target.value }); setError('');}}
               required
             />
           )}
@@ -46,14 +46,14 @@ export const LoginPanel = ({ onAuth }) => {
             type="email"
             placeholder="Email"
             value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            onChange={(e) => {setForm({ ...form, email: e.target.value }); setError('');}}
             required
           />
           <input
             type="password"
             placeholder="Password"
             value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            onChange={(e) => {setForm({ ...form, password: e.target.value }); setError('');}}
             minLength={6}
             required
           />

@@ -14,6 +14,8 @@ export default function App() {
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [loadingRooms, setLoadingRooms] = useState(false);
+  const [error, setError] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     if (!token) return;
@@ -69,6 +71,12 @@ export default function App() {
     loadRooms();
   }, [token]);
 
+  useEffect(() => {
+    if (!error) return;
+    const timer = setTimeout(() => setError(''), 3500);
+    return () => clearTimeout(timer);
+  }, [error]);
+
   const handleAuth = async (mode, payload) => {
     const data = await api.post(`/auth/${mode}`, payload);
     setAuth(data.token, data.user);
@@ -76,7 +84,10 @@ export default function App() {
 
   const handleSelectRoom = async (room) => {
     setActiveRoom(room);
-    if (!room) {
+    if (room) {
+      localStorage.setItem('activeRoomId', room._id);
+    } else {
+      localStorage.removeItem('activeRoomId');
       setMessages([]);
       return;
     }
@@ -88,6 +99,46 @@ export default function App() {
     if (socket) {
       socket.emit('join', room._id);
       console.log('Joined room:', room._id);
+    }
+  };
+
+  useEffect(() => {
+    if (!token || !rooms.length) return;
+    const savedRoomId = localStorage.getItem('activeRoomId');
+    if (savedRoomId) {
+      const room = rooms.find((r) => r._id === savedRoomId);
+      if (room) {
+        handleSelectRoom(room);
+      }
+    }
+  }, [token, rooms.length]);
+
+  const handleClearChat = async () => {
+    if (!activeRoom || !confirm('Clear all messages in this room?')) return;
+    try {
+      setError('');
+      await api.post(`/rooms/${activeRoom._id}/clear`, {}, token);
+      setMessages([]);
+      setError('Chat cleared');
+    } catch (err) {
+      setError(err.message || 'Failed to clear chat');
+    }
+  };
+
+  const handleDeleteRoom = async (room) => {
+    if (!room || !confirm(`Delete "${room.name}" permanently?`)) return;
+    try {
+      setError('');
+      await api.post(`/rooms/${room._id}/delete`, {}, token);
+      setRooms((prev) => prev.filter((r) => r._id !== room._id));
+      if (activeRoom?._id === room._id) {
+        setActiveRoom(null);
+        setMessages([]);
+        localStorage.removeItem('activeRoomId');
+      }
+      setError('Room deleted');
+    } catch (err) {
+      setError(err.message || 'Failed to delete room');
     }
   };
 
@@ -103,11 +154,17 @@ export default function App() {
   };
 
   const handleDirectRoom = async (email) => {
-    const data = await api.post('/rooms/direct', { email }, token);
-    const exists = rooms.find((r) => r._id === data.room._id);
-    const list = exists ? rooms : [data.room, ...rooms];
-    setRooms(list);
-    handleSelectRoom(data.room);
+    if (!email || !email.trim()) return;
+    try {
+      setError('');
+      const data = await api.post('/rooms/direct', { email }, token);
+      const exists = rooms.find((r) => r._id === data.room._id);
+      const list = exists ? rooms : [data.room, ...rooms];
+      setRooms(list);
+      handleSelectRoom(data.room);
+    } catch (err) {
+      setError(err.message || 'Could not create direct message');
+    }
   };
 
   const handleLogout = () => {
@@ -134,7 +191,13 @@ export default function App() {
       onCreateRoom={handleCreateRoom}
       onDirectRoom={handleDirectRoom}
       onLogout={handleLogout}
+      onClearChat={handleClearChat}
+      onDeleteRoom={handleDeleteRoom}
       loadingRooms={loadingRooms}
+      error={error}
+      onErrorClose={() => setError('')}
+      sidebarOpen={sidebarOpen}
+      onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
     />
   );
 }
