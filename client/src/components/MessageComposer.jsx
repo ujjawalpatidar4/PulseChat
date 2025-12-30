@@ -19,12 +19,15 @@ export const MessageComposer = ({ roomId, onSend }) => {
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    console.log('Uploading file:', file.name, file.type);
     setUploading(true);
     try {
       const data = await upload(file, token);
+      console.log('Upload response:', data);
       await onSend({ content: '', mediaUrl: data.url, mediaType: data.type });
     } catch (err) {
-      alert('Upload failed');
+      console.error('Upload error:', err);
+      alert('Upload failed: ' + err.message);
     } finally {
       setUploading(false);
       fileRef.current.value = '';

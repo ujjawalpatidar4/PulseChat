@@ -4,7 +4,7 @@ import { MessageFeed } from './MessageFeed.jsx';
 import { MessageComposer } from './MessageComposer.jsx';
 import { useAuth } from '../state/AuthContext.jsx';
 
-export const ChatShell = ({ user, rooms, activeRoom, messages, onSelectRoom, onSend, onCreateRoom, onDirectRoom, loadingRooms }) => {
+export const ChatShell = ({ user, rooms, activeRoom, messages, onSelectRoom, onSend, onCreateRoom, onDirectRoom, loadingRooms, onLogout }) => {
   const sortedRooms = useMemo(
     () => [...rooms].sort((a, b) => new Date(b.lastMessageAt || 0) - new Date(a.lastMessageAt || 0)),
     [rooms]
@@ -20,6 +20,7 @@ export const ChatShell = ({ user, rooms, activeRoom, messages, onSelectRoom, onS
         onCreateRoom={onCreateRoom}
         onDirectRoom={onDirectRoom}
         loading={loadingRooms}
+        onLogout={onLogout}
       />
       <div className="chat-panel">
         {activeRoom ? (

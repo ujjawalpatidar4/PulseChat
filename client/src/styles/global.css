@@ -285,8 +285,12 @@ input::placeholder {
 
 .media-img {
   max-width: 100%;
+  max-height: 400px;
   border-radius: 0.5rem;
   margin-top: 0.5rem;
+  object-fit: contain;
+  display: block;
+  cursor: pointer;
 }
 
 .timestamp {

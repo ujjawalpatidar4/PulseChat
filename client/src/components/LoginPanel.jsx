@@ -35,6 +35,7 @@ export const LoginPanel = ({ onAuth }) => {
         <form onSubmit={submit} className="stack">
           {mode === 'register' && (
             <input
+              type="text"
               placeholder="Full name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}

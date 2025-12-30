@@ -1,5 +1,6 @@
 import http from 'http';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -14,6 +15,12 @@ import { authRequired } from './middleware/auth.js';
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadDir = path.resolve(__dirname, '..', 'uploads');
+
+console.log('Upload directory path:', uploadDir);
+
 const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
@@ -22,7 +29,8 @@ const io = new SocketIOServer(server, {
 
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', credentials: true }));
 app.use(express.json({ limit: '10mb' }));
-app.use('/uploads', express.static(path.join(process.cwd(), 'server', 'uploads')));
+app.use('/uploads', express.static(uploadDir));
+console.log('Static files being served from /uploads at:', uploadDir);
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes);

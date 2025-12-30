@@ -110,6 +110,15 @@ export default function App() {
     handleSelectRoom(data.room);
   };
 
+  const handleLogout = () => {
+    socket?.disconnect();
+    setSocket(null);
+    setRooms([]);
+    setActiveRoom(null);
+    setMessages([]);
+    setAuth(null, null);
+  };
+
   if (!token || !user) {
     return <LoginPanel onAuth={handleAuth} />;
   }
@@ -124,6 +133,7 @@ export default function App() {
       onSend={handleSendMessage}
       onCreateRoom={handleCreateRoom}
       onDirectRoom={handleDirectRoom}
+      onLogout={handleLogout}
       loadingRooms={loadingRooms}
     />
   );

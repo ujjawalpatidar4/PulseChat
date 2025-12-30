@@ -1,4 +1,4 @@
-export const RoomList = ({ user, rooms, activeRoom, onSelectRoom, onCreateRoom, onDirectRoom, loading }) => {
+export const RoomList = ({ user, rooms, activeRoom, onSelectRoom, onCreateRoom, onDirectRoom, loading, onLogout }) => {
   return (
     <aside className="room-list">
       <div className="user-bar">
@@ -9,6 +9,9 @@ export const RoomList = ({ user, rooms, activeRoom, onSelectRoom, onCreateRoom, 
           <strong>{user.name}</strong>
           <p className="text-xs muted">{user.email}</p>
         </div>
+        <button className="icon-btn" onClick={onLogout} title="Logout">
+          ↩
+        </button>
       </div>
       <div className="actions">
         <button onClick={() => onDirectRoom(prompt('Enter user email:'))}>💬 Direct</button>
