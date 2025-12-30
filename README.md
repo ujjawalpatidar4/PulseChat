@@ -63,6 +63,18 @@ VITE_API_URL=http://localhost:4000/api
 VITE_SOCKET_URL=http://localhost:4000
 ```
 
+### 4. Run the application
+
+**Server:** 
+``` 
+npm run dev 
+```
+
+**Client:** 
+``` 
+npm run dev 
+```
+
 ---
 
 ## Running the Application
@@ -95,6 +107,32 @@ Client will run on [http://localhost:5173](http://localhost:5173).
 5. All messages are **persisted** and visible on refresh  
 
 ---
+
+## Screenshots
+
+### Login Page
+![PulseChat Login Page](screenshots/PulseChat%20Login%20Page.png)
+
+### Register Page
+![Register Page](screenshots/Register%20Page.png)
+
+### Chat Box
+![PulseChat Chat Box](screenshots/PulseChat%20Chat%20Box.png)
+
+### File Upload
+![Chat with File upload](screenshots/Chat%20with%20File%20upload.png)
+
+### Responsive Design
+![Responsive 1](screenshots/Responsive%201.png)
+![Responsive 2](screenshots/Responsive%202.png)
+
+---
+
+## Deployment
+
+### Live Application
+- **Frontend:** [https://pulse-chat-ebon.vercel.app](https://pulse-chat-ebon.vercel.app)
+- **Backend:** [https://pulsechat-yglx.onrender.com](https://pulsechat-yglx.onrender.com)
 
 ## Project Structure
 
