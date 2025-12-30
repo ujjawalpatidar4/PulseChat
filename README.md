@@ -62,19 +62,6 @@ CLIENT_ORIGIN=http://localhost:5173
 VITE_API_URL=http://localhost:4000/api
 VITE_SOCKET_URL=http://localhost:4000
 ```
-
-### 4. Run the application
-
-**Server:** 
-``` 
-npm run dev 
-```
-
-**Client:** 
-``` 
-npm run dev 
-```
-
 ---
 
 ## Running the Application
