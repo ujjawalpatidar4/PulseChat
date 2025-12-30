@@ -1,0 +1,14 @@
+:root {
+  --bg-dark: #0f0f23;
+  --bg-glass: rgba(30, 30, 60, 0.7);
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --text: #e0e0ff;
+  --text-muted: #9090b0;
+  --border: rgba(100, 100, 150, 0.3);
+  --message-bg: rgba(40, 40, 80, 0.6);
+  --message-me-bg: rgba(99, 102, 241, 0.3);
+  --sidebar-bg: rgba(20, 20, 40, 0.9);
+  --radius: 0.75rem;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
